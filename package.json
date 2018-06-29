@@ -1,10 +1,11 @@
 {
-  "name": "native-dns-packet",
-  "version": "0.1.1",
+  "name": "ows-native-dns-packet",
+  "version": "0.1.2",
   "authors": [
     "Timothy J Fontaine <tjfontaine@gmail.com> (http://atxconsulting.com)",
     "Greg Slepak <contact@taoeffect.com> (https://twitter.com/taoeffect)",
-    "Matthieu Rakotojaona"
+    "Matthieu Rakotojaona",
+    "Giang Minh <giangndm@ows.vn>"
   ],
   "description": "Raw DNS Packet Parsing and Writing",
   "keywords": [
