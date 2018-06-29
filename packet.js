@@ -152,7 +152,8 @@ var
   WRITE_SOA   = consts.NAME_TO_QTYPE.SOA,
   WRITE_OPT   = consts.NAME_TO_QTYPE.OPT,
   WRITE_NAPTR = consts.NAME_TO_QTYPE.NAPTR,
-  WRITE_TLSA  = consts.NAME_TO_QTYPE.TLSA;
+  WRITE_TLSA  = consts.NAME_TO_QTYPE.TLSA,
+  WRITE_CAA   = consts.NAME_TO_QTYPE.CAA;
 
 function writeHeader(buff, packet) {
   assert(packet.header, 'Packet requires "header"');
@@ -362,6 +363,17 @@ function writeTlsa(buff, val) {
   return WRITE_RESOURCE_DONE;
 }
 
+function writeCaa(buff, val) {
+  assertUndefined(val.flag, 'CAA record requires "flag"');
+  assertUndefined(val.tag, 'CAA record requires "tag"');
+  assertUndefined(val.value, 'CAA record requires "value"');
+  buff.writeUInt8(val.flag);
+  buff.writeUInt8(val.tag.length);
+  buff.write(val.tag, val.tag.length, 'ascii');
+  buff.write(val.value, val.value.length, 'ascii');
+  return WRITE_RESOURCE_DONE;
+}
+
 function makeEdns(packet) {
   packet.edns = {
     name: '',
@@ -481,6 +493,9 @@ Packet.write = function(buff, packet) {
         case WRITE_TLSA:
           state = writeTlsa(buff, val);
           break;
+        case WRITE_CAA:
+          state = writeCaa(buff, val);
+          break;  
         case WRITE_END:
           return buff.tell();
         default:
